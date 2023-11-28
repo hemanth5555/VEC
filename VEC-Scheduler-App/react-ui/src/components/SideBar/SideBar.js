@@ -37,6 +37,10 @@ const SideBar = ({ onUploadClick, onSettingsClick }) => {
   }
 
 
+  const handleHomeClick = () => {
+    onHomeClick();
+  }
+  
   const handleSettingsClick = () => {
     onSettingsClick();
   }
