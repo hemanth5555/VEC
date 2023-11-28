@@ -53,7 +53,7 @@ function LoginPage({ onLogin }) {
 
   return (
     <div className="loginpage">
-      <h1>Welcome to Local AI - Brainerd Dispatch Project</h1>
+      <h1>Volunteer Edge Computing for Scientific Workflows</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Username:
