@@ -37,7 +37,6 @@ const SideBar = ({ onUploadClick, onSettingsClick }) => {
   }
 
 
-
   const handleSettingsClick = () => {
     onSettingsClick();
   }
