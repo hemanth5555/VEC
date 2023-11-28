@@ -1,11 +1,6 @@
-from dotenv import load_dotenv
-load_dotenv()
-import os
-
-class ApplicationConfig(object):
+class Config(object):
     DEBUG = False
     TESTING = False
-    SECRET_KEY = os.environ['SECRET_KEY']
 
     # DATABASE_NAME = 'localaidb'
     # DB_USERNAME = 'root'
@@ -16,8 +11,19 @@ class ApplicationConfig(object):
     DB_USERNAME = 'admin'
     DB_PASSWORD = 'LuckyYou5*'
     DB_CONFIG = 'brainerd.cagp06uyemwc.us-east-1.rds.amazonaws.com'
-    SQL_Alchemy_URI = 'mysql+pymysql://'+ DB_USERNAME + ':' + DB_PASSWORD + '@' + DB_CONFIG + '/' + DATABASE_NAME
 
     RABBITMQ_HOST = 'localhost'
 
+
+class ProductionConfig(Config):
+    pass
+
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+
+class TestingConfig(Config):
+    TESTING = True
 

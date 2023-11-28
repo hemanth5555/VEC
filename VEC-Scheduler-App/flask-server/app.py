@@ -1,28 +1,36 @@
-from flask import Flask, request
-from flask_cors import CORS  # Import CORS
-from flask_bcrypt import Bcrypt
-import json
-from config import ApplicationConfig
-from services.login_service import LoginService
-from config import ApplicationConfig
+from flask import Flask, session, jsonify, request
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, func
+from sqlalchemy.orm import sessionmaker
 import os
+from pytz import timezone
+import json
+from services.login_service import LoginService
+from services.agency_service import WorkflowService
+from services.user_service import UserService
 import uuid
-from dotenv import load_dotenv
-load_dotenv()
+
 
 app = Flask(__name__)
-# Session(app)
+CORS(app)
+app.config.from_object("config.DevelopmentConfig")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://'+ app.config['DB_USERNAME'] + ':' + app.config['DB_PASSWORD'] + '@' + app.config['DB_CONFIG'] + '/' + app.config['DATABASE_NAME']
 
-app.config.from_object(ApplicationConfig)
+if __name__ == "__main__":
+	app.run()
 
-bcrypt = Bcrypt(app)
-cors = CORS(app, supports_credentials=True)  # Configure CORS first
+'''
+    Initiating database connection with SQLAlchemy
+'''
+db = SQLAlchemy(app)
 
 
 '''
     session dictionary
 '''
 sessions = {}
+
 
 
 '''
@@ -44,24 +52,26 @@ def is_user_authenticated():
         return json.dumps({'response': True}), 200
     else:
         return json.dumps({'response': False}), 401
-    
 
 
+
+'''
+    Rest end points to authenticate the user
+'''
 @app.route('/login', methods=['POST'])
 def do_login():
-    # Your login logic here
     login_details = request.get_json(force=True)
     username = login_details['username']
     password = login_details['password']
-
-    # AWS_REGION = os.getenv("password" + username[4])
-    pw = os.getenv("password" + username[4])
-
+    login_service = LoginService()
+    user = login_service.get_user_info(username)
+    passwd = login_service.get_encrypted_password(password)
+    print(passwd)
     print(password)
-    if(password == pw):
+    if(user.user_password == passwd):
         print("Creating session for user " + username)
         session_token = str(uuid.uuid4())
-        sessions[session_token] = str(username)
+        sessions[session_token] = str(user.user_id)
         print(session_token)
         print(username)
         return json.dumps({'response': {"session_token" : session_token, "username": username}}), 200
@@ -69,6 +79,51 @@ def do_login():
         return json.dumps({'response': "Incorrect Credentials"}), 401
     
 
+'''
+    Rest end points to authenticate the user
+'''
+@app.route('/user', methods=['GET', 'POST', 'DELETE'])
+def user_maintenance():
+    session_token = request.headers.get('session-token')
+    try:
+        user_id = is_authenticated(session_token)
+    except:
+        return json.dumps({'response': "Unauthorized request"}), 401
+    
+    user_service = UserService()
+    if request.method == 'GET':
+        print("Getting the list of users")
+        response = user_service.get_user_list()
+        return json.dumps({'response': response}), 200 
+    
+    elif request.method == 'POST':
+        data = request.get_json()
+        if data:
+            print("Creating user")
+            name = data.get('user_name')
+            password = data.get('user_password')
+            first_name = data.get('user_firstname')
+            last_name = data.get('user_lastname')
+            print(name)
+            print(password)
+            print(first_name)
+            print(last_name)
+            return user_service.add_user(name, password, first_name, last_name)
+        else:
+            return "Invalid JSON data in the request body", 400
+        
+    elif request.method == 'DELETE':
+        user_id = request.args.get('user_id')
+        if user_id:
+            print("Deleting user")
+            return user_service.delete_user(int(user_id))
+        else:
+            return "Invalid JSON data in the request body", 400
+        
+
+'''
+    Rest end points to upload the workflow
+'''
 @app.route('/upload_workflow', methods=['POST'])
 def upload_workflow():
     # Check if the POST request has the 'workflow_name' field
@@ -102,14 +157,9 @@ def upload_workflow():
     file_path = os.path.join(staging_location, file.filename)
     file.save(file_path)
     print(file.filename)
-
-    # # Save the file to a designated folder
-    # file.save(os.path.join("path/to/your/upload/folder", file.filename))
-
-    # Add your additional workflow processing logic here
-
     return json.dumps({'response': "Workflow uploaded successfully"}), 200
     
+
 
 '''
     Rest end points to logout the authenticated user
@@ -123,5 +173,31 @@ def do_logout():
     return json.dumps({'response': 'success'}), 200
 
 
-if __name__ == "__main__":
-    app.run(port=7001)
+
+
+
+
+
+'''
+    Rest API to get the list of workflows in the system
+'''
+@app.route('/workflows', methods=['GET', 'POST', 'DELETE'])
+def get_workflows():
+    session_token = request.headers.get('session-token')
+    try:
+        user_id = is_authenticated(session_token)
+    except:
+        return json.dumps({'response': "Unauthorized request"}), 401
+    generic_service = WorkflowService()
+    if request.method == 'GET':
+        print("Getting the workflow list")
+        response = generic_service.get_workflow_list(int(user_id))
+        return json.dumps({'response': response}), 200 
+
+
+
+    
+
+
+    
+

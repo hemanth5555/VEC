@@ -13,4 +13,5 @@ class User(Base):
     user_password = Column(Text)
     user_firstname = Column(String(256))
     user_lastname = Column(String(256))
+    #pubid = Column(String(256))
 

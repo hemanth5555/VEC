@@ -1,8 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
+from threading import Thread
+import os
+from datetime import datetime
+from pytz import timezone
+from config import Config
 from dbmappers.user import User
-from config import ApplicationConfig
+import json
 import hashlib
 
 
@@ -10,7 +15,7 @@ class LoginService:
 
 
     def __init__(self):
-        self.SQL_Alchemy_URI = ApplicationConfig.SQL_Alchemy_URI #'mysql+pymysql://'+ Config.DB_USERNAME + ':' + Config.DB_PASSWORD + '@' + Config.DB_CONFIG + '/' + Config.DATABASE_NAME
+        self.SQL_Alchemy_URI = 'mysql+pymysql://'+ Config.DB_USERNAME + ':' + Config.DB_PASSWORD + '@' + Config.DB_CONFIG + '/' + Config.DATABASE_NAME
 
     def get_user_info(self, username):
         engine = create_engine(self.SQL_Alchemy_URI)
