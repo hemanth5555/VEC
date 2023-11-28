@@ -76,7 +76,8 @@ function HomePage() {
 
       <div className="sidebar-container">
         <SideBar onUploadClick={() => handleComponentToggle('upload')} 
-        onSettingsClick={() => handleSettingsClick()}/>
+        onSettingsClick={() => handleSettingsClick()}
+        onHomeClick={() => handleHomeClick()}/>
         {componentToRender}
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './SideBar.css'
 
-const SideBar = ({ onUploadClick, onSettingsClick }) => {
+const SideBar = ({ onUploadClick, onSettingsClick, onHomeClick }) => {
 
 
   const [publications, setPublications] = useState([]);
@@ -40,7 +40,7 @@ const SideBar = ({ onUploadClick, onSettingsClick }) => {
   const handleHomeClick = () => {
     onHomeClick();
   }
-  
+
   const handleSettingsClick = () => {
     onSettingsClick();
   }
