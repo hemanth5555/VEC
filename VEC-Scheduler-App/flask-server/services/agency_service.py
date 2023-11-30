@@ -30,6 +30,11 @@ class WorkflowService:
                 'workflow_name' : "RNASeq", 
             }
         agency_json_list.append(agency_json)
+        agency_json = {
+                'workflow_id' : 4,
+                'workflow_name' : "Appointment Scheduling", 
+            }
+        agency_json_list.append(agency_json)
         #json_output = json.dumps(agency_json_list)
         #print(json_output)
         session.close()

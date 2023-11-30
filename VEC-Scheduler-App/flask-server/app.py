@@ -32,7 +32,10 @@ db = SQLAlchemy(app)
 '''
 sessions = {}
 
-
+cluster_info = {0:["VEC_VEN1", "VEC_VEN3"], 1: ["VEC_VEN4"], 2: ["VEC_VEN4"], 3: ["VEC_VEN5"]}
+final_cluster = 3
+ven_info = {"VEC_VEN1": "http://54.80.26.203:7001/execute_as", "VEC_VEN2": "http://54.242.250.88:7001/execute_as", "VEC_VEN3":"http://44.204.23.120:7001/execute_as", "VEC_VEN4":"http://52.73.70.189:7001/execute_as", "VEC_VEN5":"http://3.88.66.66:7001/execute_as"}
+workflow_reqs = {"RAM": 16, "Storage": "24", "CUPS": 2, "Type": "Compute"}
 
 '''
     Check if the session token sent by client is valid and return the username for the session token
@@ -140,6 +143,9 @@ def upload_workflow():
 
     workflow_name = request.form['workflow_name']
 
+    print(workflow_name)
+    print(workflow_reqs)
+
     # Check if the POST request has the file part
     if 'file' not in request.files:
         return json.dumps({'response': "No file part"}), 400
@@ -158,7 +164,41 @@ def upload_workflow():
     file_path = os.path.join(staging_location, file.filename)
     file.save(file_path)
     print(file.filename)
-    return json.dumps({'response': "Workflow uploaded successfully"}), 200
+
+    print("File processed successfulluy!")
+    print("Cluster Info", cluster_info)
+
+    # url = "http://3.88.66.66:7001/execute_as"
+
+    # Set the path to the file you want to attach
+    file_path = file_path
+    import requests
+
+    # Set the form data including the file
+    form_data = {
+        'workflow_name': 'YourWorkflowName',
+    }
+
+    files = {'file': ('zipcon.zip', open(file_path, 'rb'))}
+
+    
+    print("Sending the file to cluster ", final_cluster)
+
+    url = ven_info[cluster_info[final_cluster][0]]
+    print("Cluster choosen for execution : ",cluster_info[final_cluster])
+    print("Node choosen for execution : ", ven_info[cluster_info[final_cluster][0]])
+
+    url = ven_info[cluster_info[final_cluster][0]]
+
+    # Make the POST request
+    try:
+        response = requests.post(url, data=form_data, files=files)
+        response.raise_for_status()  # Raise an exception for HTTP errors (4xx and 5xx)
+        print("Request successful:", response.text)
+        return json.dumps({'response': "Workflow uploaded successfully and execution initiated"}), 200
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        return json.dumps({'response': f"Error in executing workflow: "}), 500
     
 
 
