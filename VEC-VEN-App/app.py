@@ -22,12 +22,6 @@ if __name__ == "__main__":
 
 @app.route('/execute_as', methods=['POST'])
 def upload_workflow():
-    # if 'workflow_name' not in request.form:
-    #     return json.dumps({'response': "Missing 'workflow_name' field"}), 400
-
-    # workflow_name = request.form['workflow_name']
-
-    # Check if the POST request has the file part
     if 'file' not in request.files:
         return json.dumps({'response': "No file part"}), 400
 
@@ -63,7 +57,16 @@ def upload_workflow():
     if os.path.exists(execute_sh_path):
         os.system(f'chmod +x {execute_sh_path}')
         os.system(execute_sh_path)
-        return json.dumps({'response': "Workflow uploaded and executed successfully"}), 200
+        output_file = file_path = os.path.join(staging_location, "output.log")
+        try:
+            with open(output_file, 'r') as file:
+                file_contents = file.read()
+                print("File contents:", file_contents)
+        except FileNotFoundError:
+            print(f"File not found at {file_path}")
+        except Exception as e:
+            print(f"Error reading file: {e}")
+        return json.dumps({'response': "Workflow uploaded and executed successfully", "output_log": file_contents}), 200
     else:
         return json.dumps({'response': "execute.sh not found in the uploaded file"}), 400
 

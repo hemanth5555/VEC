@@ -90,7 +90,7 @@ from sklearn.metrics import confusion_matrix
 # In[3]:
 
 
-NoShowData = pd.read_excel(r"data/No-show_Data.xlsx")
+NoShowData = pd.read_excel(r"/home/ubuntu/VEC/VEC-VEN-App/staging/unzipped/zipcon/data/No-show_Data.xlsx")
 
 NoShowData.sample(5)
 
@@ -337,7 +337,7 @@ best_classifier.predict(X_Test_NoShow)
 
 
 #Import new examples
-NoShowData_NewExamples = pd.read_excel(r"data/No-show_Data_Testing.xlsx")
+NoShowData_NewExamples = pd.read_excel(r"/home/ubuntu/VEC/VEC-VEN-App/staging/unzipped/zipcon/data/No-show_Data_Testing.xlsx")
 
 
 NoShowData_NewExamples = Preprocess(NoShowData_NewExamples)
