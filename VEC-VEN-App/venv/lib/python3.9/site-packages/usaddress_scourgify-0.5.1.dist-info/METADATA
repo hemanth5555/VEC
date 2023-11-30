@@ -1,0 +1,26 @@
+Metadata-Version: 2.1
+Name: usaddress-scourgify
+Version: 0.5.1
+Summary: Clean US addresses following USPS pub 28 and RESO guidelines
+Home-page: https://github.com/GreenBuildingRegistry/usaddress-scourgify
+Author: Fable Turas
+Author-email: fable@rainsoftware.tech
+Maintainer: GreenBuildingRegistry
+Maintainer-email: admin@greenbuildingregistry.com
+License: UNKNOWN
+Keywords: usaddress,normalization,address
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+License-File: LICENSE
+Requires-Dist: geocoder (>=1.22.6)
+Requires-Dist: usaddress (>=0.5.9)
+Requires-Dist: yaml-config (>=0.1.2)
+
+UNKNOWN
+

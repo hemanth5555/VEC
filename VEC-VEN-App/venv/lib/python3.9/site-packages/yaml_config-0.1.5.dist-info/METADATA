@@ -1,0 +1,27 @@
+Metadata-Version: 2.1
+Name: yaml-config
+Version: 0.1.5
+Summary: Python client for reading yaml based config files
+Home-page: https://github.com/GreenBuildingRegistry/yaml-config
+Author: Paul Munday, Fable Turas
+Author-email: paul@paulmunday.net, fable@rainsoftware.tech
+Maintainer: GreenBuildingRegistry
+Maintainer-email: admin@greenbuildingregistry.com
+License: UNKNOWN
+Keywords: yaml,config,pyyaml
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Dist: PyYAML (>=3.13)
+Requires-Dist: typing (>=3.6.1) ; python_version < "3.5"
+
+UNKNOWN
+
+
