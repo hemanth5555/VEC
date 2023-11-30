@@ -18,7 +18,8 @@ app.config.from_object("config.DevelopmentConfig")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://'+ app.config['DB_USERNAME'] + ':' + app.config['DB_PASSWORD'] + '@' + app.config['DB_CONFIG'] + '/' + app.config['DATABASE_NAME']
 
 if __name__ == "__main__":
-	app.run()
+    print("Started")
+    app.run()
 
 '''
     Initiating database connection with SQLAlchemy
