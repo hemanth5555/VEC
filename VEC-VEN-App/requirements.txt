@@ -14,3 +14,5 @@ pymupdf
 usaddress-scourgify
 frontend
 tabula-py==2.7.0
+scikit-learn
+openpyxl
